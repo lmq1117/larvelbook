@@ -1,81 +1,83 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1,user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>@yield('title')</title>
-	<!-- <link rel="stylesheet" href="D:/app/wnmp/nginx/html/github/laravelbook/public/css/weui.css"> -->
-	
 	<link rel="stylesheet" href="/css/weui.css">
 	<link rel="stylesheet" href="/css/book.css">
 </head>
 <body>
-	
-	@yield('content')
 
-	<div class="page">
-		{{--<div class="page__hd">--}}
-			{{--<h1 class="page__title">ActionSheet</h1>--}}
-			{{--<p class="page__desc">弹出式菜单</p>--}}
-		{{--</div>--}}
-		<div class="page__bd page__bd_spacing">
-			<a href="javascript:;" class="weui-btn weui-btn_default" id="showIOSActionSheet">iOS ActionSheet</a>
-			{{--<a href="javascript:;" class="weui-btn weui-btn_default" id="showAndroidActionSheet">Android ActionSheet</a>--}}
-		</div>
-		<!--BEGIN actionSheet-->
-		<div>
-			<div class="weui-mask" id="iosMask" style="display: none"></div>
-			<div class="weui-actionsheet" id="iosActionsheet">
-				<div class="weui-actionsheet__menu">
-					<div class="weui-actionsheet__cell">欧美风情</div>
-					<div class="weui-actionsheet__cell">请我吃饭</div>
-					<div class="weui-actionsheet__cell">请我唱歌</div>
-					<div class="weui-actionsheet__cell">请我喝酒</div>
-					<div class="weui-actionsheet__cell">请我桑拿</div>
-					<div class="weui-actionsheet__cell">请我泡脚</div>
-				</div>
-				<div class="weui-actionsheet__action">
-					<div class="weui-actionsheet__cell" id="iosActionsheetCancel">取消</div>
-				</div>
-			</div>
-		</div>
+@yield('content')
 
-		<div class="weui-skin_android" id="androidActionsheet" style="display: none">
-			<div class="weui-mask"></div>
-			<div class="weui-actionsheet">
-				<div class="weui-actionsheet__menu">
-					<div class="weui-actionsheet__cell">示例菜单</div>
-					<div class="weui-actionsheet__cell">示例菜单</div>
-					<div class="weui-actionsheet__cell">示例菜单</div>
-				</div>
-			</div>
+<!-- tooltips -->
+<div class="bk_toptips"><span></span></div>
+
+<div id="global_menu" onclick="onMenuClick();">
+	<div></div>
+</div>
+
+<!--BEGIN actionSheet-->
+<div id="actionSheet_wrap">
+	<div class="weui_mask_transition" id="mask"></div>
+	<div class="weui_actionsheet" id="weui_actionsheet">
+		<div class="weui_actionsheet_menu">
+			<div class="weui_actionsheet_cell" onclick="onMenuItemClick(1)">用户中心</div>
+			<div class="weui_actionsheet_cell" onclick="onMenuItemClick(2)">选择套餐</div>
+			<div class="weui_actionsheet_cell" onclick="onMenuItemClick(3)">周边油站</div>
+			<div class="weui_actionsheet_cell" onclick="onMenuItemClick(4)">常见问题</div>
 		</div>
-		<!--END actionSheet-->
-		<div class="page__ft">
-			<a href="javascript:home();"><img src="http://weui.cc/images/icon_footer_link.png" /></a>
+		<div class="weui_actionsheet_action">
+			<div class="weui_actionsheet_cell" id="actionsheet_cancel">取消</div>
 		</div>
 	</div>
+</div>
+
 </body>
 <script src="/js/jquery-1.11.2.min.js"></script>
 <script type="text/javascript">
-    // ios
-    $(function(){
-        var $iosActionsheet = $('#iosActionsheet');
-        var $iosMask = $('#iosMask');
+    function hideActionSheet(weuiActionsheet, mask) {
+        weuiActionsheet.removeClass('weui_actionsheet_toggle');
+        mask.removeClass('weui_fade_toggle');
+        weuiActionsheet.on('transitionend', function () {
+            mask.hide();
+        }).on('webkitTransitionEnd', function () {
+            mask.hide();
+        })
+    }
 
-        function hideActionSheet() {
-            $iosActionsheet.removeClass('weui-actionsheet_toggle');
-            $iosMask.fadeOut(200);
-        }
-
-        $iosMask.on('click', hideActionSheet);
-        $('#iosActionsheetCancel').on('click', hideActionSheet);
-        $("#showIOSActionSheet").on("click", function(){
-            $iosActionsheet.addClass('weui-actionsheet_toggle');
-            $iosMask.fadeIn(200);
+    function onMenuClick () {
+        var mask = $('#mask');
+        var weuiActionsheet = $('#weui_actionsheet');
+        weuiActionsheet.addClass('weui_actionsheet_toggle');
+        mask.show().addClass('weui_fade_toggle').click(function () {
+            hideActionSheet(weuiActionsheet, mask);
         });
-    });
+        $('#actionsheet_cancel').click(function () {
+            hideActionSheet(weuiActionsheet, mask);
+        });
+        weuiActionsheet.unbind('transitionend').unbind('webkitTransitionEnd');
+    }
 
+    function onMenuItemClick(index) {
+        var mask = $('#mask');
+        var weuiActionsheet = $('#weui_actionsheet');
+        hideActionSheet(weuiActionsheet, mask);
+        if(index == 1) {
+
+        } else if(index == 2) {
+
+        } else if(index == 3){
+
+        } else {
+            $('.bk_toptips').show();
+            $('.bk_toptips span').html("敬请期待!");
+            setTimeout(function() {$('.bk_toptips').hide();}, 2000);
+        }
+    }
 </script>
-@yield('my-js')
+@yield('my_js')
 </html>
